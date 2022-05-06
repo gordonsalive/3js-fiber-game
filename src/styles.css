@@ -21,3 +21,24 @@ body,
 body {
   background: white;
 }
+
+.CameraControls_Panel {
+  position: absolute;
+  height: 94;
+  width: 94;
+  border: 2px solid #a2b9e7; 
+  background-color: none;
+  display: inline-block;
+}
+
+.CameraControls_Buttons {
+  display: grid;
+  grid-template-rows: 30px 30px 30px;
+  grid-template-columns: 30px 30px 30px;
+  justify-content: centre;
+  vertical-align: middle;
+  align-items: centre;
+  text-align: center;
+  border: none;
+  margin: 0px 0px;
+}

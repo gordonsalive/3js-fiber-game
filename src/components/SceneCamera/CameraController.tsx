@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import * as THREE from "three";
 
 // ** todo: this should be a custom hook instead of an empty component **
 // ** also, it doesn't seem to work at all |:-(
