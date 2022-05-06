@@ -16,6 +16,7 @@ export default function Ball({coords}: BallProps) {
             position={position}
             scale={dims}>
             <sphereBufferGeometry attach='geometry' />
+            {/* <meshStandardMaterial attach='material' color={0xff8844} metalness={0.8} roughness={0} /> */}
             <meshPhongMaterial attach='material' color={0xff8844} />
         </mesh>
     );

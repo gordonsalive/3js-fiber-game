@@ -12,14 +12,29 @@ import BufferedBox from './BufferedBox';
 import Block from './Block';
 import Bot from './Bot';
 import Ball from './Ball';
+import { CameraControls } from './SceneCamera/CameraControls';
 
 export default function Scene() {
-    const gridRotation = 0;
-    const cameraX = noOfCellsWide/2 * cellWidth;
-    const cameraY = noOfCellsHigh/2 * cellHeight;
-  
     const containerRef = React.createRef<HTMLDivElement>();
     const scrollingRef = React.createRef<HTMLDivElement>();
+
+    const cameraXStart = noOfCellsWide/2 * cellWidth;
+    const cameraYStart = noOfCellsHigh/2 * cellHeight;
+    const [cameraX, setCameraX] = useState(cameraXStart);
+    const [cameraY, setCameraY] = useState(cameraYStart);
+    const updateCameraX = (delta: number) => setCameraX(cameraX + delta);
+    const updateCameraY = (delta: number) => setCameraY(cameraY + delta);
+    const outerWindow = {width: 1200, height: 850};
+    const innerWindow = {width: 2400, height: 1200};
+    const resetScrollBars = () => scrollingRef.current?.scrollTo((innerWindow.width - outerWindow.width)/2, (innerWindow.height - outerWindow.height)/2);
+    const resetCameraPosition = () => {
+      setCameraX(cameraXStart);
+      setCameraY(cameraYStart);
+      resetScrollBars();
+    };
+    const [threeDEnabled, setThreeDEnabled] = useState(false);
+    const [gridRotation, setGridRotation] = useState(0);
+    const updateGridRotation = (deltaDegrees: number) => setGridRotation(gridRotation + deltaDegrees);
 
     const fps = 28;
     const [frameCount, setFrameCount] = useState(1);
@@ -45,12 +60,9 @@ export default function Scene() {
       }, 1000/fps);
     }, [frameCount]);
 
-    const outerWindow = {width: 1200, height: 850};
-    const innerWindow = {width: 2400, height: 1200};
-
     useEffect(() => {
       // centre the scroll bars, based on the difference in the sizes of the inner and outer divs
-      scrollingRef.current?.scrollBy((innerWindow.width - outerWindow.width)/2, (innerWindow.height - outerWindow.height)/2);
+      resetScrollBars();
       GameSetup();
     }, [/*run only once*/])
 
@@ -68,11 +80,11 @@ export default function Scene() {
                           cameraX={cameraX}
                           cameraY={cameraY}
                           gridRotation={gridRotation}
-                          threeDEnabled={false}
+                          threeDEnabled={threeDEnabled}
                           zoomLevel={0.6/* affected by the height of the window we are rendering into */}
                       />
               <ambientLight />
-              <pointLight position={[10, 10, 10]} />
+              <pointLight position={[noOfCellsWide * cellWidth * 0.1, -10, noOfCellsHigh * cellHeight * 0.8]} />
               {boxes.map(box => <BufferedBox position={box.position} dims={box.dims} rotation={box.rotation} colour={0x12fe78} chameleon={true}/> )}
               <Floor />
               <Block startPos={{x:1, y:1}} endPos={{x:1, y:30}} colour={0x12fe78} />
@@ -83,6 +95,13 @@ export default function Scene() {
               <Ball coords={GameData.ball1.pos} />
             </Canvas>
             {/* LEARNING - Anything inside fiber Canvas must be a fiber component */}
+            <CameraControls 
+              outerWindow={outerWindow} 
+              updateCameraX={updateCameraX} 
+              updateCameraY={updateCameraY}
+              resetCameraPosition={resetCameraPosition} 
+              update3DState={setThreeDEnabled}
+              updateGridRotation={updateGridRotation}/>
           </div>
         </div>
       )
