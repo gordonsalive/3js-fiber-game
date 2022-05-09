@@ -19,7 +19,10 @@ export const CameraControls = ({outerWindow, updateCameraX, updateCameraY, reset
                 <button onClick={() => updateCameraY(5)}>{"\u25B2"}</button>
                 <button onClick={() => update3DState(true)}><small>3D</small></button>
                 <button onClick={() => updateCameraX(-5)}>{"\u25C0"}</button>
-                <button style={{transform: `rotate(${360 - gridRotation}deg)`}} onClick={() => resetCameraPosition()}>{"\u221F"}</button>
+                <button 
+                  className="CameraControl_ResetButton"
+                  style={{transform: `rotate(${360 - gridRotation}deg)`, transition: 'transform 150ms ease'}} 
+                  onClick={() => resetCameraPosition()}>{"\u221F"}</button>
                 {/* <button onClick={() => resetCameraPosition()}>{"\u229B"}</button> */}
                 <button onClick={() => updateCameraX(5)}>{"\u25B6"}</button>
                 <button onClick={() => updateGridRotation(90)}>{"\u21AA"}</button>

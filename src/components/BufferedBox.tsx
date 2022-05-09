@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import React, { useRef } from 'react';
 import { Color } from '@react-three/fiber';
 import { XYZ } from '../boxes';
+import { Texture } from 'three';
 
 // ** LEARNING:
 // ** Even using buffered boxes I cannot draw enough boxes (40,000 will be required!) - looking at an pure 3js demo here: https://codepen.io/tutsplus/pen/zLvZQy?editors=0010
@@ -14,13 +15,24 @@ interface BoxProps {
     dims: XYZ,
     rotation: XYZ,
     colour: Color,
-    chameleon?: boolean 
+    chameleon?: boolean,
+    textures?: Texture[]
 }
 
-export default function BufferedBox({position, dims, rotation, colour, chameleon}: BoxProps) {
+const getMaterial = (isChameleon: boolean | undefined, textures: Texture[] | undefined, colour: Color) => {
+    if (isChameleon) {
+        return (<meshNormalMaterial attach='material' />);
+    } else if (textures) {
+        return textures.map((texture, i) => <meshBasicMaterial attachArray="material" map={texture} key={'BufferedBox_MaterialTexture'+i} />);
+    } else {
+        return (<meshLambertMaterial attach='material' color={colour} />);
+    }
+}
+
+export default function BufferedBox({position, dims, rotation, colour, chameleon, textures}: BoxProps) {
     // This reference will give us direct access to the THREE.Mesh object
     const ref = useRef<THREE.Mesh>(null!);
-
+ 
     return (
         <mesh
             position={position}
@@ -28,7 +40,7 @@ export default function BufferedBox({position, dims, rotation, colour, chameleon
             scale={dims}
             rotation={rotation}>
             <boxBufferGeometry attach='geometry' />
-            {chameleon ? <meshNormalMaterial attach='material' /> : <meshLambertMaterial attach='material' color={colour}/>}
+            {getMaterial(chameleon, textures, colour)}
         </mesh>
     )
 }

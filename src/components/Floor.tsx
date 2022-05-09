@@ -17,6 +17,8 @@ interface FloorTilesData {
     floorTiles: FloorTileData[]
 }
 
+// ** TODO: threejs has a thing called a sprite - how many sprites can it display?  Use Sprite for floor instead?
+
 const createFloorData = (): FloorTilesData => {
     // ** LEARNING: at 200 x 2000 (40,000 cell) it shows identical performance issue to real gridmap
     // ** (on my laptop, slow on chrome where I have a million tabs open, fine on Safari)

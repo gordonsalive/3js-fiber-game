@@ -7,6 +7,10 @@ npm-debug.log*
 logs
 *.log
 
+# local only files
+local/
+.DS_Store
+
 # Node Dependency directory
 node_modules
 

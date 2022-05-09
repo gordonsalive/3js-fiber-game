@@ -1,5 +1,5 @@
 /* React and fiber */
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 /* plain ts modules */
 import { boxes, updateRotations } from '../boxes';
@@ -41,7 +41,13 @@ export default function Scene() {
       setCameraX(scene.cameraXStart);
       setCameraY(scene.cameraYStart);
       resetScrollBars();
-      setGridRotation(0);
+      const directionOffset = gridRotation % 360;
+      if (directionOffset > 180) {
+        updateGridRotation(90);
+      } else {
+        updateGridRotation(-directionOffset)
+      }
+      //setGridRotation();
       setThreeDEnabled(false);
     };
 
@@ -89,23 +95,26 @@ export default function Scene() {
               >
             <Canvas linear >
               <color attach="background" args={['#a2b9e7']} />
-              <SceneCamera
-                cameraX={cameraX}
-                cameraY={cameraY}
-                gridRotation={gridRotation}
-                threeDEnabled={threeDEnabled}
-                zoomLevel={0.6/* affected by the height of the window we are rendering into */}
-              />
-              <ambientLight />
-              <pointLight position={[noOfCellsWide * cellWidth * 0.1, -10, noOfCellsHigh * cellHeight * 0.8]} />
-              {boxes.map(box => <BufferedBox position={box.position} dims={box.dims} rotation={box.rotation} colour={0x12fe78} chameleon={true}/> )}
-              <Floor />
-              <Block startPos={{x:1, y:1}} endPos={{x:1, y:30}} colour={0x12fe78} />
-              <Block startPos={{x:2, y:1}} endPos={{x:29, y:1}} colour={0x12fe78} />
-              <Block startPos={{x:30, y:1}} endPos={{x:30, y:30}} colour={0x12fe78} />
-              <Block startPos={{x:2, y:30}} endPos={{x:29, y:30}} colour={0x12fe78} />
-              <Bot coords={GameData.bot1Pos} colour={0xAAAAAA} />
-              <Ball coords={GameData.ball1.pos} />
+              {/* LEARNING - if using useLoader (to load textures) must have a suspense handler for while awaiting load */}
+              <Suspense fallback={null}> 
+                <SceneCamera
+                  cameraX={cameraX}
+                  cameraY={cameraY}
+                  gridRotation={gridRotation}
+                  threeDEnabled={threeDEnabled}
+                  zoomLevel={0.6/* affected by the height of the window we are rendering into */}
+                />
+                <ambientLight />
+                <pointLight position={[noOfCellsWide * cellWidth * 0.1, -10, noOfCellsHigh * cellHeight * 0.8]} />
+                {boxes.map((box,i) => <BufferedBox position={box.position} dims={box.dims} rotation={box.rotation} colour={0x12fe78} chameleon={true} key={'Scene_BufferedBox_'+i} /> )}
+                <Floor />
+                <Block startPos={{x:1, y:1}} endPos={{x:1, y:30}} colour={0x12fe78} />
+                <Block startPos={{x:2, y:1}} endPos={{x:29, y:1}} colour={0x12fe78} />
+                <Block startPos={{x:30, y:1}} endPos={{x:30, y:30}} colour={0x12fe78} />
+                <Block startPos={{x:2, y:30}} endPos={{x:29, y:30}} colour={0x12fe78} />
+                <Bot coords={GameData.bot1Pos} colour={0xAAAAAA} />
+                <Ball coords={GameData.ball1.pos} />
+              </Suspense>
             </Canvas>
             {/* LEARNING - Anything inside fiber Canvas must be a fiber component */}
             <CameraControls 

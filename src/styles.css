@@ -42,3 +42,8 @@ body {
   border: none;
   margin: 0px 0px;
 }
+
+.CameraControl_ResetButton {
+  height: 30;
+  width: 30;
+}
