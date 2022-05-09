@@ -112,7 +112,7 @@ export default function Scene() {
                 <Block startPos={{x:2, y:1}} endPos={{x:29, y:1}} colour={0x12fe78} />
                 <Block startPos={{x:30, y:1}} endPos={{x:30, y:30}} colour={0x12fe78} />
                 <Block startPos={{x:2, y:30}} endPos={{x:29, y:30}} colour={0x12fe78} />
-                <Bot coords={GameData.bot1Pos} colour={0xAAAAAA} />
+                <Bot coords={GameData.bot1Pos} colour={0xAAAAAA} noTexture={true} />
                 <Ball coords={GameData.ball1.pos} />
               </Suspense>
             </Canvas>
