@@ -21,7 +21,7 @@
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.1",
     "babel-loader": "^8.2.2",
-    "css-loader": "^5.2.6",
+    "css-loader": "^7.0.0",
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
     "webpack": "5.71.0",
